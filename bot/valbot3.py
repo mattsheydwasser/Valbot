@@ -1,5 +1,9 @@
 import discord
+import os
+from dotenv import load_dotenv
 from valo_api import endpoints
+
+load_dotenv()
 
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
@@ -23,4 +27,4 @@ async def on_message(message):
             await message.channel.send('Are you dumb? That user does not exist.')
 
 
-client.run('MTA0MTIwOTk3MDY1OTY5MjYzNA.GclzrA.wMRLaCc8iPLNTf32HxMPRvnNZhLu_L84dlM_Pk')
+client.run(os.getenv('TOKEN'))
