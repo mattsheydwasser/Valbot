@@ -27,4 +27,4 @@ async def on_message(message):
             await message.channel.send('Are you dumb? That user does not exist.')
 
 
-client.run(os.getenv('TOKEN'))
+client.run(os.getenv(TOKEN))
