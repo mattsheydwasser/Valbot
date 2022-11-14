@@ -37,6 +37,7 @@ async def on_message(message):
             await message.channel.send('Are you dumb? That user does not exist.')
 
     # TODO: write account, history, skin info
+    # put functionality into seperate function, check if then go to that specific function
     if message.content.startswith('!acc'):
         pass
     if message.content.startswith('!hist'):
