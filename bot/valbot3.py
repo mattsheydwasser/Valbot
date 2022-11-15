@@ -52,23 +52,29 @@ async def accountDetails(name, tag, message):
     Output: Information (level, picture, region)
     """
 
+    # get the users information
     details = endpoints.get_account_details_by_name_v1(name, tag)
     mmr = endpoints.get_mmr_details_by_name_v1(region='na', name=name, tag=tag)
-        # prints information to chat
-        # CARD DISPLAY MAY CAUSE ERRORS
-    #await message.channel.send(
-     #   '\033[1mUser:\033[0m ' + details.name + { files:[ details.card.small ] } + 
-      #  '\n\033[1mLevel:\033[0m '+details.account_level + 
-       # '\033[1m Region:\033[0m '+ details.region)
+    hist = endpoints.get_match_history_by_name_v3('na', name=name, tag=tag, game_mode='Competitive')
         
+    # create and format the display of information of account
     embed = discord.Embed(title = name+'#'+tag)
-
     embed.add_field(name='Rank: ', value=mmr.currenttierpatched)
     embed.add_field(name='RR: ', value=str(mmr.ranking_in_tier), inline=True)
     embed.add_field(name='Account Level: ', value=str(details.account_level), inline=True)
+    
+    # empty space
+    embed.add_field(name='\u200B', value='\u200B')
+    
+    # print details of last 5 matches
+    for each in hist:
+        embed.add_field(name='Map', value=hist[each].map)
 
+    # adds profile card to displayed data
     imageurl = details.card.wide
     embed.set_image(url = imageurl)
+    
+    # send message to channel
     await message.channel.send(embed=embed)
         
 client.run(os.getenv('TOKEN'))
