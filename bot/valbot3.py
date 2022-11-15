@@ -53,7 +53,7 @@ async def accountDetails(name, tag, message):
     """
 
     details = endpoints.get_account_details_by_name_v1(name, tag)
-    mmr = endpoints.get_mmr_detailas_by_name_v1(region='na', name=name, tag=tag)
+    mmr = endpoints.get_mmr_details_by_name_v1(region='na', name=name, tag=tag)
         # prints information to chat
         # CARD DISPLAY MAY CAUSE ERRORS
     #await message.channel.send(
@@ -61,16 +61,14 @@ async def accountDetails(name, tag, message):
       #  '\n\033[1mLevel:\033[0m '+details.account_level + 
        # '\033[1m Region:\033[0m '+ details.region)
         
-    embed = discord.Embed(
-            title = name+'#'+tag,
-            description = mmr.currenttierpatched
-            )
-    embed.add_field({name: 'RR:', value: str(mmr.ranking_in_tier), inline: true })
-    embed.add_field({name: 'Account Level:', value: str(details.account_level), inline: true })
-    embed.add_field({name: 'Region:', value: details.region, inline: true })
+    embed = discord.Embed(title = name+'#'+tag)
 
-    imageurl = details.card.large
-    embed.set_thumbnail(url = imageurl)
+    embed.add_field(name='Rank: ', value=mmr.currenttierpatched)
+    embed.add_field(name='RR: ', value=str(mmr.ranking_in_tier), inline=True)
+    embed.add_field(name='Account Level: ', value=str(details.account_level), inline=True)
+
+    imageurl = details.card.wide
+    embed.set_image(url = imageurl)
     await message.channel.send(embed=embed)
         
 client.run(os.getenv('TOKEN'))
