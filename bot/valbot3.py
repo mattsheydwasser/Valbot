@@ -29,11 +29,11 @@ async def on_message(message):
     # TODO: write account, history, skin info
     # put functionality into seperate function, check if then go to that specific function
     if message.content.startswith('!acc'):
-        #try: 
-        nameTag = getName(message.content)
-        await accountDetails(nameTag[0], nameTag[1], message)
-        #except:
-        #    await message.channel.send('Are you dumb? That user does not exist.')
+        try: 
+            nameTag = getName(message.content)
+            await accountDetails(nameTag[0], nameTag[1], message)
+        except:
+            await message.channel.send('Are you dumb? That user does not exist.')
         
     if message.content.startswith('!hist'):
         # returns metadata (test to see containing), players, team, rounds, kills
@@ -59,16 +59,28 @@ async def accountDetails(name, tag, message):
         
     # create and format the display of information of account
     embed = discord.Embed(title = name+'#'+tag)
-    embed.add_field(name='Rank: ', value=mmr.currenttierpatched)
+    embed.add_field(name='Rank: ', value=mmr.currenttierpatched, inline=True)
     embed.add_field(name='RR: ', value=str(mmr.ranking_in_tier), inline=True)
     embed.add_field(name='Account Level: ', value=str(details.account_level), inline=True)
     
     # empty space
     embed.add_field(name='\u200B', value='\u200B')
+    embed.add_field(name='\u200B', value='\u200B')
+    embed.add_field(name='\u200B', value='\u200B')
+
     
     # print details of last 5 matches
+    i = 0
     for each in hist:
-        embed.add_field(name='Map', value=hist[each].map)
+        meta = hist[i].metadata
+        length = round((meta.game_length / (3.6 * pow(10,6))) * 60)
+
+        embed.add_field(name='Map: ', value=meta.map, inline=True)
+        embed.add_field(name='Duration: ', value=str(length)+' mins', inline=True)
+        embed.add_field(name='Date: ', value=meta.game_start_patched, inline=True)
+
+        i+=1
+        
 
     # adds profile card to displayed data
     imageurl = details.card.wide
