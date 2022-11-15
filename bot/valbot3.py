@@ -29,11 +29,11 @@ async def on_message(message):
     # TODO: write account, history, skin info
     # put functionality into seperate function, check if then go to that specific function
     if message.content.startswith('!acc'):
-        try: 
-            nameTag = getName(message.content)
-            await accountDetails(nameTag[0], nameTag[1])
-        except:
-            await message.channel.send('Are you dumb? That user does not exist.')
+        #try: 
+        nameTag = getName(message.content)
+        await accountDetails(nameTag[0], nameTag[1], message)
+        #except:
+        #    await message.channel.send('Are you dumb? That user does not exist.')
         
     if message.content.startswith('!hist'):
         # returns metadata (test to see containing), players, team, rounds, kills
@@ -45,7 +45,7 @@ async def on_message(message):
         # search for requested, output as needed
         pass
 
-async def accountDetails(name, tag):
+async def accountDetails(name, tag, message):
     """ 
     Gets account information of given user
     Input: Name of user, tag of user
@@ -56,11 +56,18 @@ async def accountDetails(name, tag):
         
         # prints information to chat
         # CARD DISPLAY MAY CAUSE ERRORS
-    await message.channel.send(
-        '\033[1mUser:\033[0m ' + details.name + { files:[ details.card.small ] } + 
-        '\n\033[1mLevel:\033[0m '+details.account_level + 
-        '\033[1m Region:\033[0m '+ details.region)
+    #await message.channel.send(
+     #   '\033[1mUser:\033[0m ' + details.name + { files:[ details.card.small ] } + 
+      #  '\n\033[1mLevel:\033[0m '+details.account_level + 
+       # '\033[1m Region:\033[0m '+ details.region)
         
-    
+    embed = discord.Embed(
+            title = 'Title string',
+            description = 'Body desc'
+            )
+
+    imageurl = details.card.small
+    embed.set_image(url = imageurl)
+    await message.channel.send(embed=embed)
         
 client.run(os.getenv('TOKEN'))
