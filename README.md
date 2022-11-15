@@ -7,7 +7,7 @@ How to deploy:
 - tmux new -s DiscordBot  
   
 2. Change to the Discord bot project directory.  
-- cd ~/discord-bot  
+- cd ~/ValorantAPI/bot 
 
 3. Start the bot.  
-- python3 discord_bot.py  
+- python3 valbot3.py  

@@ -29,8 +29,11 @@ async def on_message(message):
     # TODO: write account, history, skin info
     # put functionality into seperate function, check if then go to that specific function
     if message.content.startswith('!acc'):
-        nameTag = getName(message.content)
-        accountDetails(nameTag[0], nameTag[1])
+        try: 
+            nameTag = getName(message.content)
+            accountDetails(nameTag[0], nameTag[1])
+        except:
+            await message.channel.send('Are you dumb? That user does not exist.')
         
     if message.content.startswith('!hist'):
         # returns metadata (test to see containing), players, team, rounds, kills
@@ -48,23 +51,16 @@ async def accountDetails(name, tag):
     Input: Name of user, tag of user
     Output: Information (level, picture, region)
     """
-    
-    details = endpoints.get_account_details_by_name_v1('Silas', '69LOL')
-    print(details.account_level, details.card.small)
-    
-    try:
-        
-        details = endpoints.get_account_details_by_name_v1(name, tag)
+
+    details = endpoints.get_account_details_by_name_v1(name, tag)
         
         # prints information to chat
         # CARD DISPLAY MAY CAUSE ERRORS
-        await message.channel.send(
-            '\033[1mUser:\033[0m ' + details.name + { files:[ details.card.small ] } + 
-            '\n\033[1mLevel:\033[0m '+details.account_level + 
-            '\033[1m Region:\033[0m '+ details.region
-            '\n\033[1mRank:\033[0m '+info.currenttierpatched+'\033[1m RR:\033[0m '+str(info.ranking_in_tier))
+    await message.channel.send(
+        '\033[1mUser:\033[0m ' + details.name + { files:[ details.card.small ] } + 
+        '\n\033[1mLevel:\033[0m '+details.account_level + 
+        '\033[1m Region:\033[0m '+ details.region)
         
-    except:
-        await message.channel.send('Are you dumb? That user does not exist.')
+    
         
 client.run(os.getenv('TOKEN'))
