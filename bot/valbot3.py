@@ -1,6 +1,5 @@
 import discord
 import os
-import colors
 from dotenv import load_dotenv
 from valo_api import endpoints
 
@@ -18,7 +17,7 @@ def getName(string):
 
 @client.event
 async def on_message(message):
-    if message.content == 'Valbot !':
+    if message.content == 'Valbot !cmds':
         await message.channel.send(
             'Get mmr details (rank, rr): !mmr Player#TAG \
             \nGet account details (account level, region): !acc Player#TAG \
@@ -27,19 +26,12 @@ async def on_message(message):
         )
 
 
-    if message.content.startswith('!mmr'):
-        name = getName(message.content)
-        try:
-            info = endpoints.get_mmr_details_by_name_v1(region='na', name=name[0], tag=name[1])
-       
-            await message.channel.send('\033[1mUser:\033[0m '+info.name+'\n\033[1mRank:\033[0m '+info.currenttierpatched+'\n\033[1mRR:\033[0m '+str(info.ranking_in_tier))
-        except:
-            await message.channel.send('Are you dumb? That user does not exist.')
-
     # TODO: write account, history, skin info
     # put functionality into seperate function, check if then go to that specific function
     if message.content.startswith('!acc'):
-        pass
+        nameTag = getName(message.content)
+        accountDetails(nameTag[0], nameTag[1])
+        
     if message.content.startswith('!hist'):
         # returns metadata (test to see containing), players, team, rounds, kills
         # print all to see formatting
@@ -50,4 +42,29 @@ async def on_message(message):
         # search for requested, output as needed
         pass
 
+async def accountDetails(name, tag):
+    """ 
+    Gets account information of given user
+    Input: Name of user, tag of user
+    Output: Information (level, picture, region)
+    """
+    
+    details = endpoints.get_account_details_by_name_v1('Silas', '69LOL')
+    print(details.account_level, details.card.small)
+    
+    try:
+        
+        details = endpoints.get_account_details_by_name_v1(name, tag)
+        
+        # prints information to chat
+        # CARD DISPLAY MAY CAUSE ERRORS
+        await message.channel.send(
+            '\033[1mUser:\033[0m ' + details.name + { files:[ details.card.small ] } + 
+            '\n\033[1mLevel:\033[0m '+details.account_level + 
+            '\033[1m Region:\033[0m '+ details.region
+            '\n\033[1mRank:\033[0m '+info.currenttierpatched+'\033[1m RR:\033[0m '+str(info.ranking_in_tier))
+        
+    except:
+        await message.channel.send('Are you dumb? That user does not exist.')
+        
 client.run(os.getenv('TOKEN'))
