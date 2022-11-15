@@ -31,7 +31,7 @@ async def on_message(message):
     if message.content.startswith('!acc'):
         try: 
             nameTag = getName(message.content)
-            accountDetails(nameTag[0], nameTag[1])
+            await accountDetails(nameTag[0], nameTag[1])
         except:
             await message.channel.send('Are you dumb? That user does not exist.')
         
